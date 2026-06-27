@@ -2,6 +2,7 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
+#![allow(warnings)]
 
 #[cfg(all(target_os = "macos", any(target_arch = "x86", target_arch = "x86_64")))]
 pub mod ctypes {

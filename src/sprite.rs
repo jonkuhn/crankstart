@@ -415,7 +415,7 @@ impl Sprite {
     /// Returns a reference to the bitmap assigned to the sprite, if any.  Specifically,
     /// returns Err if the inner data is already mutably borrowed; Ok(None) if no sprite has
     /// been assigned; Ok(Some(Ref<Bitmap>)) if a sprite has been assigned.
-    pub fn get_image(&self) -> Result<Option<Ref<Bitmap>>> {
+    pub fn get_image(&self) -> Result<Option<Ref<'_, Bitmap>>> {
         let borrowed: Ref<SpriteInner> = self.inner.try_borrow().map_err(Error::msg)?;
         let filtered: Result<Ref<Bitmap>, _> =
             Ref::filter_map(borrowed, |b: &SpriteInner| b.get_image());

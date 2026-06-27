@@ -221,6 +221,19 @@ impl BitmapInner {
         }
     }
 
+    pub fn set_bitmap_mask(&self, mask: Bitmap) -> Result<(), Error> {
+        let graphics = Graphics::get();
+        let mut out_err: *const crankstart_sys::ctypes::c_char = ptr::null_mut();
+        let mask_raw = mask.inner.borrow().raw_bitmap;
+        let r = pd_func_caller!((*graphics.0).setBitmapMask, self.raw_bitmap, mask_raw)?;
+        if r != 1 {
+            let err_msg = unsafe { CStr::from_ptr(out_err).to_string_lossy().into_owned() };
+            Err(anyhow!(err_msg))
+        } else {
+            Ok(())
+        }
+    }
+
     pub fn check_mask_collision(
         &self,
         my_location: ScreenPoint,
@@ -332,6 +345,10 @@ impl Bitmap {
 
     pub fn load(&self, path: &str) -> Result<(), Error> {
         self.inner.borrow().load(path)
+    }
+
+    pub fn set_bitmap_mask(&self, mask: Bitmap) -> Result<(), Error> {
+        self.inner.borrow().set_bitmap_mask(mask)
     }
 
     pub fn check_mask_collision(
